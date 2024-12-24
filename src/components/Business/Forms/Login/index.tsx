@@ -1,9 +1,19 @@
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { REGEXS } from "../../../../utils/const";
+import { LS_KEYS, REGEXS } from "../../../../utils/const";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
+
+import { addApiAuth } from "../../../../utils/addApiAuth";
+import { useAppDispatch } from "../../../../hooks/useAppDispatch";
+import { login } from "../../../../redux/authSlice/thunks";
 
 type Inputs = {
   username: string;
@@ -17,8 +27,25 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const dispatch = useAppDispatch();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      setIsSubmitting(true);
+      await dispatch(login(data)).unwrap();
+
+      localStorage.setItem(LS_KEYS.username, data.username);
+      localStorage.setItem(LS_KEYS.password, data.password);
+
+      addApiAuth(data.username, data.password);
+    } catch {
+      setError("Failed to login. Try another creds");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <form
@@ -71,9 +98,22 @@ export default function LoginForm() {
           },
         }}
       />
-      <Button variant="contained" sx={{ margintTop: "15px" }} type="submit">
+      <Button
+        variant="contained"
+        sx={{ margintTop: "15px" }}
+        type="submit"
+        disabled={isSubmitting}
+      >
         Login
       </Button>
+      {error && (
+        <Typography
+          color={"error"}
+          sx={{ textAlign: "center", marginTop: "5px" }}
+        >
+          {error}
+        </Typography>
+      )}
     </form>
   );
 }
