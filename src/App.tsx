@@ -1,3 +1,11 @@
+import { Routes, Route } from "react-router";
+
+import HomePage from "./pages/Home";
+
 export default function App() {
-  return <div>works</div>;
+  return (
+    <Routes>
+      <Route index element={<HomePage />} />
+    </Routes>
+  );
 }
