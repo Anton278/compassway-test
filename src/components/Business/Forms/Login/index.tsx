@@ -13,7 +13,7 @@ import { useState } from "react";
 
 import { addApiAuth } from "../../../../utils/addApiAuth";
 import { useAppDispatch } from "../../../../hooks/useAppDispatch";
-import { login } from "../../../../redux/authSlice/thunks";
+import { getCurrentUser } from "../../../../redux/authSlice/thunks";
 
 type Inputs = {
   username: string;
@@ -34,7 +34,7 @@ export default function LoginForm() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       setIsSubmitting(true);
-      await dispatch(login(data)).unwrap();
+      await dispatch(getCurrentUser(data)).unwrap();
 
       localStorage.setItem(LS_KEYS.username, data.username);
       localStorage.setItem(LS_KEYS.password, data.password);

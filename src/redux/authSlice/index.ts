@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { login, register } from "./thunks";
+import { getCurrentUser, register } from "./thunks";
 import type { User } from "../../models/User";
 import { LS_KEYS } from "../../utils/const";
 
@@ -24,7 +24,12 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.isAuthed = false;
+      state.user = { email: "", id: -1, username: "" };
+    },
+  },
   extraReducers: (builder) => {
     // register
     builder.addCase(register.fulfilled, (state, action) => {
@@ -32,14 +37,18 @@ const authSlice = createSlice({
       state.isAuthed = true;
     });
     // login
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(getCurrentUser.fulfilled, (state, action) => {
       state.user = action.payload;
       state.isAuthed = true;
+    });
+    builder.addCase(getCurrentUser.rejected, (state) => {
+      state.isAuthed = false;
+      state.user = { email: "", id: -1, username: "" };
     });
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {} = authSlice.actions;
+export const { logout } = authSlice.actions;
 
 export default authSlice.reducer;
