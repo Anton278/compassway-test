@@ -25,7 +25,7 @@ export default function AvatarMenu({ anchorEl, onClose }: AvatarMenuProps) {
   const user = useSelector(selectUser);
 
   const handleLogout = () => {
-    onClose && onClose({}, "backdropClick");
+    if (onClose) onClose({}, "backdropClick");
 
     dispatch(logout());
     localStorage.removeItem(LS_KEYS.username);

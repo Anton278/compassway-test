@@ -27,7 +27,4 @@ const emailsSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
-export const {} = emailsSlice.actions;
-
 export default emailsSlice.reducer;

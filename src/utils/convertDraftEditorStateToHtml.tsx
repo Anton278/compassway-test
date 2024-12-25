@@ -1,12 +1,16 @@
-import { convertToHTML } from "draft-convert";
+import {
+  convertToHTML,
+  type RawDraftContentBlockWithCustomType,
+} from "draft-convert";
+import { type ContentState } from "react-draft-wysiwyg";
 
-export const convertDraftEditorStateToHtml = (contentState: any) => {
+export const convertDraftEditorStateToHtml = (contentState: ContentState) => {
   if (!contentState.hasText()) {
     return ""; // Return an empty string for empty content
   }
 
   const html = convertToHTML({
-    blockToHTML: (block: any) => {
+    blockToHTML: (block: RawDraftContentBlockWithCustomType<any>) => {
       if (block.type === "unstyled") {
         return <p>{block.text || ""}</p>;
       }

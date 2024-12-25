@@ -9,7 +9,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -37,7 +36,7 @@ export default function SentEmailsTable() {
             offset: page * (rowsPerPage - 1),
           })
         ).unwrap();
-      } catch (err) {
+      } catch {
         setShowError(true);
       } finally {
         setIsLoading(false);
@@ -45,7 +44,7 @@ export default function SentEmailsTable() {
     };
 
     getAllEmails();
-  }, [page]);
+  }, [page, dispatch, rowsPerPage]);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);

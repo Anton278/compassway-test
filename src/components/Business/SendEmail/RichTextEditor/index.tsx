@@ -1,12 +1,19 @@
 import { Typography } from "@mui/material";
-import { Editor } from "react-draft-wysiwyg";
+import { type SetStateAction, type Dispatch } from "react";
+import { Editor, type EditorState } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+interface RichTextEditorProps {
+  editorState: EditorState;
+  setEditorState: Dispatch<SetStateAction<EditorState>>;
+  error: string;
+}
 
 export default function RichTextEditor({
   editorState,
   setEditorState,
   error,
-}: any) {
+}: RichTextEditorProps) {
   return (
     <>
       <Editor

@@ -33,13 +33,13 @@ export default function App() {
 
       try {
         await dispatch(getCurrentUserThunk({ username, password })).unwrap();
-      } catch (err) {
+      } catch {
         setShowUserReqError(true);
       }
     };
 
     getCurrentUser();
-  }, []);
+  }, [dispatch]);
 
   const publicRoutes: Routes = [
     { index: true, element: <HomePage /> },

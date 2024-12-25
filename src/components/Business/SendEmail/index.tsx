@@ -48,7 +48,7 @@ export default function SendEmail() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const message = convertDraftEditorStateToHtml(
       editorState.getCurrentContent()
-    ) as string;
+    );
     if (!message) {
       setTextError("This field is required");
       return;
