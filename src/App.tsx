@@ -1,14 +1,14 @@
 import { Routes, Route, Navigate } from "react-router";
+import { useSelector } from "react-redux";
+import { Alert, Snackbar } from "@mui/material";
 
 import HomePage from "./pages/Home";
-import { useSelector } from "react-redux";
 import { selectIsAuthed } from "./redux/authSlice/selectors";
 import EmailPage from "./pages/Email";
 import { useEffect, useState } from "react";
 import { LS_KEYS } from "./utils/const";
 import { getCurrentUser as getCurrentUserThunk } from "./redux/authSlice/thunks";
 import { useAppDispatch } from "./hooks/useAppDispatch";
-import { Alert, Snackbar } from "@mui/material";
 
 interface Route {
   index?: boolean;
@@ -20,7 +20,7 @@ type Routes = Route[];
 export default function App() {
   const dispatch = useAppDispatch();
   const isAuthed = useSelector(selectIsAuthed);
-  const [open, setOpen] = useState(false);
+  const [showUserReqError, setShowUserReqError] = useState(false);
 
   useEffect(() => {
     const getCurrentUser = async () => {
@@ -34,7 +34,7 @@ export default function App() {
       try {
         await dispatch(getCurrentUserThunk({ username, password })).unwrap();
       } catch (err) {
-        setOpen(true);
+        setShowUserReqError(true);
       }
     };
 
@@ -59,16 +59,11 @@ export default function App() {
       </Routes>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={open}
-        onClose={() => setOpen(false)}
+        open={showUserReqError}
+        onClose={() => setShowUserReqError(false)}
         autoHideDuration={6000}
       >
-        <Alert
-          // onClose={handleClose}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
+        <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
           Failed to get user
         </Alert>
       </Snackbar>

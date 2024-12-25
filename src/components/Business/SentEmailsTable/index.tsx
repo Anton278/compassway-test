@@ -9,6 +9,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -50,6 +51,33 @@ export default function SentEmailsTable() {
     setPage(newPage);
   };
 
+  const tableBodyContent = (() => {
+    if (isLoading) {
+      return <TableRow>loading...</TableRow>;
+    }
+
+    if (emails.length) {
+      return emails.map((email) => (
+        <TableRow
+          key={email.id}
+          sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+        >
+          <TableCell>{email.id}</TableCell>
+          <TableCell>{email.recipient}</TableCell>
+          <TableCell>{email.subject}</TableCell>
+        </TableRow>
+      ));
+    }
+
+    return (
+      <TableRow>
+        <TableCell colSpan={3} sx={{ textAlign: "center" }}>
+          No emails has been sent yet
+        </TableCell>
+      </TableRow>
+    );
+  })();
+
   return (
     <>
       <TableContainer component={Paper} sx={{ mb: "40px" }}>
@@ -61,22 +89,7 @@ export default function SentEmailsTable() {
               <TableCell>Subject</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>loading...</TableRow>
-            ) : (
-              emails.map((email) => (
-                <TableRow
-                  key={email.id}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell>{email.id}</TableCell>
-                  <TableCell>{email.recipient}</TableCell>
-                  <TableCell>{email.subject}</TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
+          <TableBody>{tableBodyContent}</TableBody>
         </Table>
         {!isLoading && (
           <TablePagination
