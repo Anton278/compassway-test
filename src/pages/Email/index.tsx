@@ -17,6 +17,7 @@ import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { logout } from "../../redux/authSlice";
 import { LS_KEYS } from "../../utils/const";
 import { $api } from "../../http/api";
+import SendEmail from "../../components/Business/SendEmail";
 
 export default function EmailPage() {
   const dispatch = useAppDispatch();
@@ -86,6 +87,9 @@ export default function EmailPage() {
           </Menu>
         </Container>
       </AppBar>
+      <Container maxWidth="md">
+        <SendEmail />
+      </Container>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import { Provider } from "react-redux";
+import { render } from "react-dom";
 
 import App from "./App.tsx";
 import { store } from "./redux/store.ts";
@@ -13,12 +13,13 @@ import "@fontsource/roboto/700.css";
 
 import "./index.css";
 
-createRoot(document.getElementById("root")!).render(
+render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
+  document.getElementById("root")
 );

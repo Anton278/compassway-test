@@ -24,20 +24,18 @@ export default function App() {
 
   useEffect(() => {
     const getCurrentUser = async () => {
+      const username = localStorage.getItem(LS_KEYS.username);
+      const password = localStorage.getItem(LS_KEYS.password);
+
+      if (!username || !password) {
+        return;
+      }
+
       try {
-        const username = localStorage.getItem(LS_KEYS.username);
-        const password = localStorage.getItem(LS_KEYS.password);
-
-        if (!username || !password) {
-          return;
-        }
-
-        try {
-          await dispatch(getCurrentUserThunk({ username, password })).unwrap();
-        } catch (err) {
-          setOpen(true);
-        }
-      } catch (err) {}
+        await dispatch(getCurrentUserThunk({ username, password })).unwrap();
+      } catch (err) {
+        setOpen(true);
+      }
     };
 
     getCurrentUser();
