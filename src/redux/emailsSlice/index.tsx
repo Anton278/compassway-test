@@ -1,12 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { Email } from "../../models/Email";
-import { sendEmail } from "./thunks";
+import { getEmails, sendEmail } from "./thunks";
+import { GetEmailsResponse } from "../../models/responses/GetEmails";
 
 export interface EmailsState {
-  emails: Email[];
+  emails: GetEmailsResponse;
+  isLoading: boolean;
 }
 
-const initialState: EmailsState = { emails: [] };
+const initialState: EmailsState = {
+  emails: { results: [] } as unknown as GetEmailsResponse,
+  isLoading: false,
+};
 
 const emailsSlice = createSlice({
   name: "emails",
@@ -14,7 +18,11 @@ const emailsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(sendEmail.fulfilled, (state, action) => {
-      state.emails.unshift(action.payload);
+      state.emails.results.push(action.payload);
+    });
+    //
+    builder.addCase(getEmails.fulfilled, (state, action) => {
+      state.emails = action.payload;
     });
   },
 });
